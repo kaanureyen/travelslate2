@@ -35,6 +35,7 @@ dev_dependencies:
     sdk: flutter
   #font_awesome_flutter: ^8.5.0
 
+  speech_to_text: ^0.6.3
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -68,6 +69,9 @@ flutter:
     - family: Monoton
       fonts:
         - asset: fonts/Monoton-Regular.ttf
+    - family: Quicksand
+      fonts:
+        - asset: fonts/Quicksand-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro

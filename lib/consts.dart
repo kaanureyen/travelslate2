@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-const kButtonColor = Color(0x80FFFFFF);
+const kButtonColor = Color(0xCFFFFFFF);
 const kIconColor = Color(0xB0000000);
 const kImageColor = Color(0x408B5770);
-const kTitleColor = Color(0xB0000000);
+const kTitleColor = Color(0xCF000000);
 
 class BottomButton extends StatelessWidget {
   final IconData icondata;

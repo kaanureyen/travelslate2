@@ -19,6 +19,8 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.light().copyWith(
+          textTheme: TextTheme(body1: TextStyle(fontFamily: 'Quicksand'))),
       title: 'Travelslate',
       initialRoute: '/',
       routes: {
@@ -33,4 +35,3 @@ class MainApp extends StatelessWidget {
     );
   }
 }
-//test commit

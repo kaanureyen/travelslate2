@@ -27,7 +27,7 @@ class HistoryScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 35),
                 child: Text(
-                  "Henüz bir çeviri yapmadınız",
+                  "Henüz bir çeviri yapmadınız.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: kButtonColor,
