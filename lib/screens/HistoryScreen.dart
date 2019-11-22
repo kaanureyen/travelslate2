@@ -5,7 +5,7 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:Container(
+      body: Container(
         color: Colors.green,
         child: SafeArea(
           child: Column(
@@ -24,18 +24,20 @@ class HistoryScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              Center(
-                child: Text("Henüz bir çeviri yapmadınız",
-                    style: TextStyle(
-                      fontSize: 20,
-                    )
-
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 35),
+                child: Text(
+                  "Henüz bir çeviri yapmadınız",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: kButtonColor,
+                    fontSize: 20,
+                  ),
                 ),
               ),
-
             ],
+          ),
         ),
-      ),
       ),
     );
   }
