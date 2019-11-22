@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
 import '../consts.dart';
 
+const kMainDecoration = BoxDecoration(
+  color: Colors.black,
+  image: DecorationImage(
+    fit: BoxFit.cover,
+    colorFilter: ColorFilter.mode(
+      kImageColor,
+      BlendMode.screen,
+    ),
+    image: AssetImage('images/img.jfif'),
+  ),
+);
+
 class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-              kImageColor,
-              BlendMode.screen,
-            ),
-            image: AssetImage('images/img.jfif'),
-          ),
-        ),
+        decoration: kMainDecoration,
         child: SafeArea(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,33 +88,30 @@ class WelcomeScreen extends StatelessWidget {
                 },
               ),
               Expanded(flex: 2, child: Container()),
-              SizedBox(
-                height: 60,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    BottomButton(
-                        icondata: Icons.history,
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/HistoryScreen');
-                        }),
-                    BottomButton(
-                        icondata: Icons.favorite,
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/FavoriteScreen');
-                        }),
-                    BottomButton(
-                        icondata: Icons.settings,
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/SettingsScreen');
-                        }),
-                    BottomButton(
-                        icondata: Icons.more_horiz,
-                        onPressed: () {
-                          print('sa');
-                        }),
-                  ],
-                ),
+              ButtonBar(
+                alignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  BottomButton(
+                      icondata: Icons.history,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/HistoryScreen');
+                      }),
+                  BottomButton(
+                      icondata: Icons.favorite,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/FavoriteScreen');
+                      }),
+                  BottomButton(
+                      icondata: Icons.settings,
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/SettingsScreen');
+                      }),
+                  BottomButton(
+                      icondata: Icons.more_horiz,
+                      onPressed: () {
+                        print('sa');
+                      }),
+                ],
               ),
             ],
           ),
