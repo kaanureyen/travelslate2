@@ -44,8 +44,7 @@ class _MicScreenState extends State<MicScreen> {
     _speech.setRecognitionResultHandler(onRecognitionResult);
     _speech.setRecognitionCompleteHandler(onRecognitionComplete);
     _speech
-        .activate()
-        .then((res) => setState(() => _speechRecognitionAvailable = res));
+        .activate(); //.then((res) => setState(() => _speechRecognitionAvailable = res));
   }
 
   @override
@@ -55,60 +54,58 @@ class _MicScreenState extends State<MicScreen> {
     activateSpeechRecognizer();
   }
 
+  var currentMicrophoneIcon = Icons.mic;
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.blue,
-      child: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Text(transcription),
-            ButtonBar(
+    return Scaffold(
+      body: Container(
+        color: Colors.blue,
+        child: SafeArea(
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: <Widget>[
-                RoundButton(
-                  icon: Icon(Icons.play_arrow),
-                  size: 30,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: Text(
+                    transcription,
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(
+                    currentMicrophoneIcon,
+                  ),
+                  iconSize: 200,
                   onPressed: !_isListening
                       ? () {
                           start();
                         }
-                      : null,
-                ),
-                RoundButton(
-                  icon: Icon(Icons.stop),
-                  size: 30,
-                  onPressed: _isListening
-                      ? () {
+                      : () {
                           stop();
-                        }
-                      : null,
+                        },
                 ),
-                RoundButton(
-                  icon: Icon(Icons.cancel),
-                  size: 30,
-                  onPressed: _isListening
-                      ? () {
-                          cancel();
-                        }
-                      : null,
-                ),
-              ],
-            ),
-          ],
+              ]),
         ),
       ),
     );
   }
 
-  void start() => _speech
-      .listen(locale: selectedLang.code)
-      .then((result) => print('_MyAppState.start => result $result'));
+  void start() {
+    _speech
+        .listen(locale: selectedLang.code)
+        .then((result) => print('_MyAppState.start => result $result'));
+  }
 
-  void cancel() =>
-      _speech.cancel().then((result) => setState(() => _isListening = result));
+  void cancel() {
+    _speech.cancel().then((result) => setState(() => _isListening = result));
+  }
 
-  void stop() =>
-      _speech.stop().then((result) => setState(() => _isListening = result));
+  void stop() {
+    _speech.stop().then((result) => setState(() => _isListening = result));
+  }
 
   void onSpeechAvailability(bool result) =>
       setState(() => _speechRecognitionAvailable = result);
@@ -119,12 +116,21 @@ class _MicScreenState extends State<MicScreen> {
         () => selectedLang = languages.firstWhere((l) => l.code == locale));
   }
 
-  void onRecognitionStarted() => setState(() => _isListening = true);
+  void onRecognitionStarted() => setState(() {
+        _isListening = true;
+        currentMicrophoneIcon = Icons.stop;
+      });
   void onRecognitionResult(String text) => setState(() => transcription = text);
-  void onRecognitionComplete() => setState(() => _isListening = false);
+  void onRecognitionComplete() => setState(() {
+        _isListening = false;
+        currentMicrophoneIcon = Icons.mic;
+      });
 
   void requestPermission() async {
     await Permission.requestPermissions([PermissionName.Microphone]);
+    //holy code but might cause problems.
+    //maybe check if it already has permissions?
+    //if it works, don't change.
   }
 }
 
