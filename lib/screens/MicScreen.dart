@@ -1,39 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:speech_recognition/speech_recognition.dart';
-import 'package:translater/consts.dart';
 import 'package:permission/permission.dart';
-
-const languages = const [
-  const Language('Türkçe', 'tr_TR'),
-  const Language('Francais', 'fr_FR'),
-  const Language('English', 'en_US'),
-  const Language('Pусский', 'ru_RU'),
-  const Language('Italiano', 'it_IT'),
-  const Language('Español', 'es_ES'),
-];
-
-class Language {
-  final String name;
-  final String code;
-
-  const Language(this.name, this.code);
-}
+import 'package:translator/translator.dart';
 
 class MicScreen extends StatefulWidget {
   @override
   _MicScreenState createState() => _MicScreenState();
 }
 
+String transcription;
+String translation;
+
 class _MicScreenState extends State<MicScreen> {
+  var translator = GoogleTranslator();
+
   SpeechRecognition _speech;
 
-  bool _speechRecognitionAvailable = false;
-  bool _isListening = false;
+  bool _speechRecognitionAvailable;
+  static bool _isListening = false;
+  var currentMicrophoneIcon = (!_isListening ? Icons.mic : Icons.stop);
 
-  String transcription = 'deneme';
-
-  //String _currentLocale = 'en_US';
-  Language selectedLang = languages.first;
+  String selectedLang;
 
   void activateSpeechRecognizer() {
     print('_MyAppState.activateSpeechRecognizer... ');
@@ -43,51 +30,61 @@ class _MicScreenState extends State<MicScreen> {
     _speech.setRecognitionStartedHandler(onRecognitionStarted);
     _speech.setRecognitionResultHandler(onRecognitionResult);
     _speech.setRecognitionCompleteHandler(onRecognitionComplete);
-    _speech
-        .activate(); //.then((res) => setState(() => _speechRecognitionAvailable = res));
+    _speech.activate();
+    //.then((res) => setState(() => _speechRecognitionAvailable = res));
+    //şu an problem yaratıyor mikrofon açıkken sayfayı kapatıp açınca. başka bir yerden çağrılmalı / çağrılmamalı
   }
 
   @override
   initState() {
     super.initState();
     requestPermission();
+    currentMicrophoneIcon = (!_isListening ? Icons.mic : Icons.stop);
     activateSpeechRecognizer();
   }
 
-  var currentMicrophoneIcon = Icons.mic;
+  Future<bool> _onWillPop() {
+    _speech.stop();
+    Navigator.of(context).pop(true);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.blue,
-        child: SafeArea(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25),
-                  child: Text(
-                    transcription,
-                    style: TextStyle(
-                      fontSize: 20,
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        body: Container(
+          color: Colors.blue,
+          child: SafeArea(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25),
+                    child: Text(
+                      (transcription != null ? transcription : 'Input Voice') +
+                          '\n\n' +
+                          (translation != null ? translation : 'Translation'),
+                      style: TextStyle(
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    currentMicrophoneIcon,
+                  IconButton(
+                    icon: Icon(
+                      currentMicrophoneIcon,
+                    ),
+                    iconSize: 200,
+                    onPressed: !_isListening
+                        ? () {
+                            start();
+                          }
+                        : () {
+                            stop();
+                          },
                   ),
-                  iconSize: 200,
-                  onPressed: !_isListening
-                      ? () {
-                          start();
-                        }
-                      : () {
-                          stop();
-                        },
-                ),
-              ]),
+                ]),
+          ),
         ),
       ),
     );
@@ -95,7 +92,7 @@ class _MicScreenState extends State<MicScreen> {
 
   void start() {
     _speech
-        .listen(locale: selectedLang.code)
+        .listen(locale: selectedLang)
         .then((result) => print('_MyAppState.start => result $result'));
   }
 
@@ -112,19 +109,32 @@ class _MicScreenState extends State<MicScreen> {
 
   void onCurrentLocale(String locale) {
     print('_MyAppState.onCurrentLocale... $locale');
-    setState(
-        () => selectedLang = languages.firstWhere((l) => l.code == locale));
+    setState(() => selectedLang = locale);
   }
 
   void onRecognitionStarted() => setState(() {
         _isListening = true;
         currentMicrophoneIcon = Icons.stop;
       });
-  void onRecognitionResult(String text) => setState(() => transcription = text);
+  void onRecognitionResult(String text) => setState(() async {
+        if (text != null && text != '') {
+          setState(() {
+            transcription = text;
+          });
+          updateAndTranslate(text);
+        }
+      });
   void onRecognitionComplete() => setState(() {
         _isListening = false;
         currentMicrophoneIcon = Icons.mic;
       });
+
+  void updateAndTranslate(String text) async {
+    String cac = await translator.translate(text, to: 'en');
+    setState(() {
+      translation = cac;
+    });
+  }
 
   void requestPermission() async {
     await Permission.requestPermissions([PermissionName.Microphone]);
@@ -133,54 +143,3 @@ class _MicScreenState extends State<MicScreen> {
     //if it works, don't change.
   }
 }
-
-/*
-    var permissions = await Permission.getPermissionsStatus([PermissionName.Calendar, PermissionName.Camera]);
-
-    var permissionNames = await Permission.requestPermissions([PermissionName.Calendar, PermissionName.Camera]);
-
-    Permission.openSettings;
-    */
-
-/*
-
-//..
-_speech = SpeechRecognition();
-
-// The flutter app not only call methods on the host platform,
-// it also needs to receive method calls from host.
-_speech.setAvailabilityHandler((bool result)
-  => setState(() => _speechRecognitionAvailable = result));
-
-// handle device current locale detection
-_speech.setCurrentLocaleHandler((String locale) =>
- setState(() => _currentLocale = locale));
-
-_speech.setRecognitionStartedHandler(()
-  => setState(() => _isListening = true));
-
-// this handler will be called during recognition.
-// the iOS API sends intermediate results,
-// On my Android device, only the final transcription is received
-_speech.setRecognitionResultHandler((String text)
-  => setState(() => transcription = text));
-
-_speech.setRecognitionCompleteHandler(()
-  => setState(() => _isListening = false));
-
-// 1st launch : speech recognition permission / initialization
-_speech
-    .activate()
-    .then((res) => setState(() => _speechRecognitionAvailable = res));
-//..
-
-speech.listen(locale:_currentLocale).then((result)=> print('result : $result'));
-
-// ...
-
-speech.cancel();
-
-// ||
-
-speech.stop();
- */
