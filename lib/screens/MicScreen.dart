@@ -1,55 +1,93 @@
 import 'package:flutter/material.dart';
-import 'package:speech_recognition/speech_recognition.dart';
 import 'package:permission/permission.dart';
 import 'package:translator/translator.dart';
+import 'package:flutter_tts/flutter_tts.dart';
+import 'package:flutter_speech_recognition/flutter_speech_recognition.dart';
 
 class MicScreen extends StatefulWidget {
   @override
   _MicScreenState createState() => _MicScreenState();
 }
 
-String transcription;
-String translation;
-
 class _MicScreenState extends State<MicScreen> {
-  var translator = GoogleTranslator();
+  String from = 'tr';
+  String to = 'de';
+  String transcription;
+  String translation;
 
-  SpeechRecognition _speech;
+  FlutterTts flutterTts = FlutterTts();
+  bool isTtsSpeaking = false;
+  List<dynamic> langsTts;
 
-  bool _speechRecognitionAvailable;
-  static bool _isListening = false;
-  var currentMicrophoneIcon = (!_isListening ? Icons.mic : Icons.stop);
+  GoogleTranslator translator = GoogleTranslator();
 
-  String selectedLang;
+  RecognitionController speech =
+      FlutterSpeechRecognition.instance.voiceController();
+  List<dynamic> langsRec;
+  bool _isListening = false;
 
-  void activateSpeechRecognizer() {
-    print('_MyAppState.activateSpeechRecognizer... ');
-    _speech = new SpeechRecognition();
-    _speech.setAvailabilityHandler(onSpeechAvailability);
-    _speech.setCurrentLocaleHandler(onCurrentLocale);
-    _speech.setRecognitionStartedHandler(onRecognitionStarted);
-    _speech.setRecognitionResultHandler(onRecognitionResult);
-    _speech.setRecognitionCompleteHandler(onRecognitionComplete);
-    _speech.activate();
-    //.then((res) => setState(() => _speechRecognitionAvailable = res));
-    //şu an problem yaratıyor mikrofon açıkken sayfayı kapatıp açınca. başka bir yerden çağrılmalı / çağrılmamalı
+  void activateSpeechRecognizer() async {
+    await speech.init();
+    langsRec = await speech.getAvailableLanguages();
+    setState(() {
+      _isListening = true;
+    });
+
+    for (String i in langsRec) {
+      if (i.startsWith(from)) {
+        setState(() {
+          _isListening = false;
+        });
+        await speech.setLanguage(i);
+        break;
+      }
+    }
+  }
+
+  void activateTts() async {
+    flutterTts.setStartHandler(ttsStartHandler);
+    flutterTts.setCompletionHandler(ttsCompletionHandler);
+    flutterTts.setErrorHandler(ttsErrorHandler);
+
+    langsTts = await flutterTts.getLanguages;
+    setState(() {
+      isTtsSpeaking = true;
+    });
+
+    for (String i in langsTts) {
+      if (i.startsWith(to)) {
+        setState(() {
+          isTtsSpeaking = false;
+        });
+        await flutterTts.setLanguage(i);
+        break;
+      }
+    }
+
+    await flutterTts.setSpeechRate(1.0);
+
+    await flutterTts.setVolume(1.0);
+
+    await flutterTts.setPitch(1.0);
   }
 
   @override
   initState() {
     super.initState();
     requestPermission();
-    currentMicrophoneIcon = (!_isListening ? Icons.mic : Icons.stop);
     activateSpeechRecognizer();
+    activateTts();
   }
 
   Future<bool> _onWillPop() {
-    _speech.stop();
+    speech.stop(); //TODO: bi bak bu ne returnleyecek
+    flutterTts.stop();
     Navigator.of(context).pop(true);
   }
 
   @override
   Widget build(BuildContext context) {
+    Future<String> tmp;
     return WillPopScope(
       onWillPop: _onWillPop,
       child: Scaffold(
@@ -70,18 +108,59 @@ class _MicScreenState extends State<MicScreen> {
                       ),
                     ),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      currentMicrophoneIcon,
-                    ),
-                    iconSize: 200,
-                    onPressed: !_isListening
-                        ? () {
-                            start();
-                          }
-                        : () {
-                            stop();
-                          },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      IconButton(
+                          icon: Icon(
+                            Icons.mic,
+                          ),
+                          iconSize: 100,
+                          onPressed: !_isListening
+                              ? () {
+                                  setState(() {
+                                    _isListening = true;
+                                  });
+                                  speech.recognize().listen(
+                                    (onData) {
+                                      setState(
+                                        () {
+                                          transcription = onData;
+                                          if (onData != null && onData != '')
+                                            tmp = translator
+                                                .translate(
+                                                  onData,
+                                                  from: from,
+                                                  to: to,
+                                                )
+                                                .then((s) => translation = s);
+                                        },
+                                      );
+                                    },
+                                    onDone: () async {
+                                      var res = await tmp;
+                                      setState(
+                                        () {
+                                          startTts(res);
+                                          _isListening = false;
+                                        },
+                                      );
+                                    },
+                                  );
+                                }
+                              : null),
+                      IconButton(
+                        icon: Icon(
+                          Icons.record_voice_over,
+                        ),
+                        iconSize: 100,
+                        onPressed: isTtsSpeaking ||
+                                translation == null ||
+                                translation == ''
+                            ? null
+                            : () => startTts(translation),
+                      ),
+                    ],
                   ),
                 ]),
           ),
@@ -90,56 +169,35 @@ class _MicScreenState extends State<MicScreen> {
     );
   }
 
-  void start() {
-    _speech
-        .listen(locale: selectedLang)
-        .then((result) => print('_MyAppState.start => result $result'));
-  }
-
-  void cancel() {
-    _speech.cancel().then((result) => setState(() => _isListening = result));
-  }
-
-  void stop() {
-    _speech.stop().then((result) => setState(() => _isListening = result));
-  }
-
-  void onSpeechAvailability(bool result) =>
-      setState(() => _speechRecognitionAvailable = result);
-
-  void onCurrentLocale(String locale) {
-    print('_MyAppState.onCurrentLocale... $locale');
-    setState(() => selectedLang = locale);
-  }
-
-  void onRecognitionStarted() => setState(() {
-        _isListening = true;
-        currentMicrophoneIcon = Icons.stop;
-      });
-  void onRecognitionResult(String text) => setState(() async {
-        if (text != null && text != '') {
-          setState(() {
-            transcription = text;
-          });
-          updateAndTranslate(text);
-        }
-      });
-  void onRecognitionComplete() => setState(() {
-        _isListening = false;
-        currentMicrophoneIcon = Icons.mic;
-      });
-
-  void updateAndTranslate(String text) async {
-    String cac = await translator.translate(text, to: 'en');
+  void ttsStartHandler() {
     setState(() {
-      translation = cac;
+      isTtsSpeaking = true;
+    });
+  }
+
+  void ttsCompletionHandler() {
+    setState(() {
+      isTtsSpeaking = false;
+    });
+  }
+
+  void ttsErrorHandler(dynamic dyn) {
+    setState(() {
+      isTtsSpeaking = false;
     });
   }
 
   void requestPermission() async {
     await Permission.requestPermissions([PermissionName.Microphone]);
-    //holy code but might cause problems.
-    //maybe check if it already has permissions?
-    //if it works, don't change.
+  }
+
+  void startTts(String text) async {
+    var result = await flutterTts.speak(text);
+    if (result == 1) setState(() => isTtsSpeaking = true);
+  }
+
+  void stopTts() async {
+    var result = await flutterTts.stop();
+    if (result == 1) setState(() => isTtsSpeaking = false);
   }
 }
