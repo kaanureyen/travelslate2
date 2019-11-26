@@ -1,6 +1,4 @@
-import 'package:translator/translator.dart';
-
-final _enLanguages = {
+const enLanguages = {
   'af': 'Afrikaans',
   'sq': 'Albanian',
   'am': 'Amharic',
@@ -107,27 +105,7 @@ final _enLanguages = {
   'zu': 'Zulu'
 };
 
-void main() async {
-  Map<String, Map<String, String>> a = {};
-  for (var i in _enLanguages.keys) {
-    Map<String, String> b = {};
-    for (var j in _enLanguages.keys) {
-      while (b[j] == null) {
-        GoogleTranslator translator = GoogleTranslator();
-        var tmp = translator.translate(_enLanguages[j], from: 'en', to: i);
-        await tmp
-            .then((s) => b[j])
-            .timeout(Duration(seconds: 2), onTimeout: () => null)
-            .catchError((e) => e = null);
-        print('i: $i, j: $j, b[j]: ${b[j]}');
-      }
-    }
-    a[i] = b;
-  }
-  print(a);
-}
-
-var _languages = {
+const languages = {
   'af': 'Afrikaans',
   'sq': 'shqiptar',
   'am': 'አማርኛ',
