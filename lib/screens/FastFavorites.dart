@@ -23,7 +23,7 @@ class _FastFavoritesState extends State<FastFavorites> {
   Widget build(BuildContext context) {
      return MaterialApp(
         home: Scaffold(
-        resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomPadding: false,
           body: SafeArea(
             child: Container(
               color: Colors.grey[200],
@@ -66,8 +66,15 @@ class _FastFavoritesState extends State<FastFavorites> {
                         color: Colors.grey[300]),
                 ),
                   Padding(padding: EdgeInsets.only(bottom:100)),
-                  Text(
-                    "İstediğiniz çeviriyi favorilere eklemek için kalp simgesine dokunun"
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: Text(
+                      "İstediğiniz çeviriyi favorilere eklemek için kalp simgesine dokunun",
+                      style: TextStyle(
+                        fontSize: 20,
+
+                    ),
+                    ),
                   ),
                   Padding(padding: EdgeInsets.only(bottom:50)),
                   Row(

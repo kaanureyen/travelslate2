@@ -1,122 +1,98 @@
 import 'package:flutter/material.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
+  @override
+  _SettingsScreenState createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+
+  Color _myColor1 = Colors.green;
+  Color _myColor2= Colors. green;
+  String myText1="On";
+  String myText2="On";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.green,
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(8),
-          children: <Widget>[
-            FlatButton(
-              onPressed: (){
-              },
-              color: Colors.black,
-              child: Text(
-                'Otomatik Seslendirme',
-                textAlign: TextAlign.left,
-                style:TextStyle(
-                    color: Colors.white
-                ),
+     body: SafeArea(
+       child: Column(
+        children: <Widget>[
+          Text("Ayarlar", style: TextStyle(
+            color: Colors.black,
+            fontSize: 40,
+          ),
+          ),
+          Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+          Row(
+            children: <Widget>[
+              Icon(Icons.surround_sound,
+              size: 30, color: Colors.green),
+              Padding(padding: EdgeInsets.only(right: 30)
               ),
-            ),
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black87,
-              child: const Center(
-                child: Text(
-                  'Otomatik Büyük Harf',
-                  style:TextStyle(
-                      color: Colors.white
-                  ),
-                ),
-
-              ),
-            ),
-
-            SizedBox(
-              height: 100,
-            ),
-
-
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black54,
-              child: Text('Abonelik Paketleri',
-              style: TextStyle(
-                color: Colors.white
+              Text("Otomatik Seslendirme",style:TextStyle(
+                color: Colors.black,
+                fontSize: 20,
               ),
               ),
-            ),
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black45,
-              child: const Center(
-                child: Text(
-                  'Abonelik Bilgileri',
-                  style: TextStyle(
-                    color: Colors.white
+              Padding(
+                padding: EdgeInsets.only(left: 70),
+              ),
+              ButtonTheme(
+                height: 25,
+                minWidth: 50,
+                child: RaisedButton(
+                    child: new Text(myText1), color: _myColor1, onPressed: () {
+                  setState(() {
+                    if (_myColor1 == Colors.green) {
+                      myText1="Off";
+                      _myColor1 = Colors.red;
+                    }
+                    else {
+                      myText1="On";
+                      _myColor1 = Colors.green;
+                    }
+                  });
+                }),
+              ),
+            ],
+          ),
+          Row(
+            children: <Widget>[
+              Icon(Icons.text_fields,
+                  size: 30, color: Colors.green),
+              Padding(padding: EdgeInsets.only(right: 30)
+              ),
+              Text("Otomatik Büyük Harf",style:TextStyle(
+                color: Colors.black,
+                fontSize: 20,
               ),
               ),
+              Padding(
+                padding: EdgeInsets.only(left: 78),
               ),
-            ),
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black38,
-              child: const Center(
-                child: Text(
-                    'Kullanıcı Sözleşmesi',
-                  style:TextStyle(
-                    color: Colors.white
-                  ),
+              ButtonTheme(
+                height: 25,
+                minWidth: 50,
+                child: RaisedButton(
+                    child: new Text(myText2), color: _myColor2, onPressed: () {
+                  setState(() {
+                    if (_myColor2 == Colors.green) {
+                      myText2="Off";
+                      _myColor2 = Colors.red;
+                    }
+                    else {
+                      myText2="On";
+                      _myColor2 = Colors.green;
+                    }
+                  });
+                }),
               ),
-
-              ),
-            ),
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black26,
-              child: const Center(
-                child: Text(
-                  'Gizlilik Sözleşmesi',
-                  style:TextStyle(
-                      color: Colors.white
-                  ),
-                ),
-
-              ),
-            ),
-            FlatButton(
-              onPressed: (){
-
-              },
-              color: Colors.black12,
-              child: const Center(
-                child: Text(
-                  'Bize Ulaşın',
-                  style:TextStyle(
-                      color: Colors.white
-                  ),
-                ),
-
-              ),
-            ),
-
-          ],
-
-        ),
-      ),
+            ],
+          ),
+        ],
+       ),
+     ),
     );
   }
 }
