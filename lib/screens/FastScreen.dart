@@ -16,17 +16,15 @@ class FastScreen extends StatefulWidget {
 }
 
 class _FastScreenState extends State<FastScreen> {
-
   List<String> _locations = ['A', 'B', 'C', 'D', 'Abdürrezzak Kıllıbacak'];
   String dropdown1;
   String dropdown2;
 
-
   void method() {
     var temp;
-    dropdown1=temp;
-    dropdown1=dropdown2;
-    dropdown2=temp;
+    dropdown1 = temp;
+    dropdown1 = dropdown2;
+    dropdown2 = temp;
   }
 
   @override
@@ -43,9 +41,10 @@ class _FastScreenState extends State<FastScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    Text("Gezi Sözlüğü",
-                      style:TextStyle(
-                      fontSize: 40,
+                    Text(
+                      "Gezi Sözlüğü",
+                      style: TextStyle(
+                        fontSize: 40,
                       ),
                     ),
                   ],
@@ -57,10 +56,7 @@ class _FastScreenState extends State<FastScreen> {
                     height: 40,
                     child: TextField(
                       decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Arama"
-
-                      ),
+                          border: InputBorder.none, hintText: "Arama"),
                     ),
                   ),
                 ),
@@ -70,22 +66,25 @@ class _FastScreenState extends State<FastScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastFavorites()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastFavorites()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.green,
+                              backgroundColor: Colors.green,
                               child: Icon(
                                 Icons.favorite,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Favoriler",
+                            Text(
+                              "Favoriler",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -101,27 +100,29 @@ class _FastScreenState extends State<FastScreen> {
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastElementary()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastElementary()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.blueAccent,
+                              backgroundColor: Colors.blueAccent,
                               child: Icon(
                                 Icons.speaker_notes,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Temel Öğeler",
+                            Text(
+                              "Temel Öğeler",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -134,68 +135,68 @@ class _FastScreenState extends State<FastScreen> {
                               children: <Widget>[
                                 Icon(
                                   Icons.arrow_forward,
-
                                 ),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastTravelAndGuidance()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastTravelAndGuidance()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.purpleAccent,
+                              backgroundColor: Colors.purpleAccent,
                               child: Icon(
                                 Icons.train,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Seyahat ve Yol Tarifi",
+                            Text(
+                              "Seyahat ve Yol Tarifi",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
                             ),
                             Expanded(
-                              child: Container(
-
-                              ),
+                              child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastAccomodation()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastAccomodation()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.indigo[900],
+                              backgroundColor: Colors.indigo[900],
                               child: Icon(
                                 Icons.hotel,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Konaklama",
+                            Text(
+                              "Konaklama",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -203,34 +204,35 @@ class _FastScreenState extends State<FastScreen> {
                             Expanded(
                               child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastRestaurant()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastRestaurant()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.yellowAccent,
+                              backgroundColor: Colors.yellowAccent,
                               child: Icon(
                                 Icons.restaurant,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Restoran ve Bar",
+                            Text(
+                              "Restoran ve Bar",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -238,34 +240,35 @@ class _FastScreenState extends State<FastScreen> {
                             Expanded(
                               child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastShopAndShopping()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastShopAndShopping()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.lightGreenAccent,
+                              backgroundColor: Colors.lightGreenAccent,
                               child: Icon(
                                 Icons.restaurant,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Mağaza ve Alışveriş",
+                            Text(
+                              "Mağaza ve Alışveriş",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -273,34 +276,35 @@ class _FastScreenState extends State<FastScreen> {
                             Expanded(
                               child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastDateTimeNumbers()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastDateTimeNumbers()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.teal,
+                              backgroundColor: Colors.teal,
                               child: Icon(
                                 Icons.calendar_today,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Tarih/Saat/Sayılar",
+                            Text(
+                              "Tarih/Saat/Sayılar",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -308,34 +312,35 @@ class _FastScreenState extends State<FastScreen> {
                             Expanded(
                               child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
                       FlatButton(
-                        onPressed: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => FastHealth()),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => FastHealth()),
                           );
                         },
                         child: Row(
                           children: <Widget>[
                             CircleAvatar(
-                              backgroundColor:Colors.redAccent,
+                              backgroundColor: Colors.redAccent,
                               child: Icon(
                                 Icons.healing,
                                 color: Colors.white,
                               ),
                             ),
                             Padding(padding: EdgeInsets.only(right: 10)),
-
-                            Text("Sağlık",
+                            Text(
+                              "Sağlık",
                               style: TextStyle(
                                 fontSize: 20,
                               ),
@@ -343,14 +348,12 @@ class _FastScreenState extends State<FastScreen> {
                             Expanded(
                               child: Container(),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: <Widget>[
                                 Icon(Icons.arrow_forward),
                               ],
                             ),
-
                           ],
                         ),
                       ),
@@ -365,8 +368,8 @@ class _FastScreenState extends State<FastScreen> {
                               color: Colors.yellowAccent,
                               child: Icon(Icons.compare_arrows),
                               onPressed: method,
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
-                          )
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(30.0)))
                         ],
                       ),
                       Row(
@@ -388,8 +391,6 @@ class _FastScreenState extends State<FastScreen> {
                               );
                             }).toList(),
                           ),
-
-
                           DropdownButton(
                             hint: Text('Dil'),
                             value: dropdown2,
@@ -405,22 +406,16 @@ class _FastScreenState extends State<FastScreen> {
                               );
                             }).toList(),
                           ),
-
-
                         ],
                       ),
                     ],
                   ),
                 ),
-
               ],
             ),
           ),
         ),
       ),
     );
-
   }
-
-
 }

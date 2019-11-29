@@ -8,6 +8,7 @@ import 'screens/MicScreen.dart';
 import 'screens/HistoryScreen.dart';
 import 'screens/FastScreen.dart';
 import 'screens/FavoriteScreen.dart';
+import 'screens/MicScreen2.dart';
 
 void main() =>
     SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -31,6 +32,7 @@ class MainApp extends StatelessWidget {
         '/HistoryScreen': (context) => HistoryScreen(),
         '/FastScreen': (context) => FastScreen(),
         '/FavoriteScreen': (context) => FavoriteScreen(),
+        '/MicScreen2': (context) => MicScreen2(),
       },
     );
   }

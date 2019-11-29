@@ -17,8 +17,9 @@ class _TextScreenState extends State<TextScreen> {
   GoogleTranslator translator = GoogleTranslator();
   FocusNode _node1;
   FocusNode _node2;
-  bool _focused = false;
-  FocusAttachment _nodeAttachment;
+  bool _focused1 = false;
+  bool _focused2 = false;
+  //FocusAttachment _nodeAttachment;//TODO: bi bak
 
   @override
   void initState() {
@@ -26,31 +27,35 @@ class _TextScreenState extends State<TextScreen> {
 
     _node1 = FocusNode(debugLabel: 'Button1');
     _node1.addListener(_handleFocusChange1);
-    _nodeAttachment = _node1.attach(context, onKey: _handleKeyPress);
+    //_nodeAttachment = _node1.attach(context, onKey: _handleKeyPress);//TODO: bi bak
     _node2 = FocusNode(debugLabel: 'Button2');
     _node2.addListener(_handleFocusChange2);
-    _nodeAttachment = _node2.attach(context, onKey: _handleKeyPress);
+    //_nodeAttachment = _node2.attach(context, onKey: _handleKeyPress);//TODO: bi bak
   }
 
   void _handleFocusChange1() {
-    if (_node1.hasFocus != _focused) {
+    if (_node1.hasFocus != _focused1) {
       setState(() {
-        _focused = _node1.hasFocus;
+        _focused1 = _node1.hasFocus;
+        _node2.unfocus();
+        _focused2 = false;
       });
     }
   }
 
   void _handleFocusChange2() {
-    if (_node2.hasFocus != _focused) {
+    if (_node2.hasFocus != _focused2) {
       setState(() {
-        _focused = _node2.hasFocus;
+        _focused2 = _node2.hasFocus;
+        _node1.unfocus();
+        _focused1 = false;
       });
     }
   }
 
-  bool _handleKeyPress(FocusNode focusnode, RawKeyEvent rawKeyEvent) {
+  /* bool _handleKeyPress(FocusNode focusnode, RawKeyEvent rawKeyEvent) {
     return true;
-  }
+  }*/ //TODO: bi bak
 
   @override
   void dispose() {
@@ -61,24 +66,13 @@ class _TextScreenState extends State<TextScreen> {
     super.dispose();
   }
 
+  TextEditingController cnt1 = TextEditingController();
+  TextEditingController cnt2 = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController cnt1 = TextEditingController(text: dropdownValue1);
-    TextEditingController cnt2 = TextEditingController(text: dropdownValue2);
-    for (var i in languages.keys) {
-      if (languages[i] == dropdownValue1) {
-        from = i;
-        print('from: $i');
-      }
-    }
-    for (var i in enLanguages.keys) {
-      if (enLanguages[i] == dropdownValue2) {
-        to = i;
-        print('to: $i');
-      }
-    }
     return Scaffold(
-      backgroundColor: Colors.lightBlueAccent,
+      backgroundColor: Colors.yellow.shade700,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -114,32 +108,52 @@ class _TextScreenState extends State<TextScreen> {
                       onChanged: (String newValue) {
                         setState(() {
                           dropdownValue1 = newValue;
+                          from = newValue;
                         });
                       },
-                      items: languages.values
+                      items: languages.keys
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Text(languages[value]),
                         );
                       }).toList(),
                     ),
-                    EditableText(
-                      onChanged: (s) {
-                        if (s != null && s != '') if (from != null &&
-                            from != '' &&
-                            to != null &&
-                            to != '')
-                          translator
-                              .translate(s, from: from, to: to)
-                              .then((s) => cnt2.text = s);
-                      },
-                      backgroundCursorColor: kIconColor,
-                      controller: cnt1,
-                      cursorColor: Colors.lightBlueAccent,
-                      focusNode: FocusNode(),
-                      style: TextStyle(color: kIconColor, fontSize: 20),
-                    ),
+                    Expanded(
+                      child: TextField(
+                        expands: true,
+                        minLines: null,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                            ),
+                          ),
+                        ),
+                        maxLines: null,
+                        onChanged: (s) async {
+                          if (s != null && s != '') if (from != null &&
+                              from != '' &&
+                              to != null &&
+                              to != '') {
+                            var tmp = await translator.translate(s,
+                                from: from, to: to);
+                            setState(() {
+                              cnt2.text = tmp;
+                            });
+                          }
+                        },
+                        controller: cnt1,
+                        cursorColor: Colors.lightBlueAccent,
+                        focusNode: _node1,
+                        style: TextStyle(color: kIconColor, fontSize: 20),
+                      ),
+                    )
                   ],
                 ),
               ),
@@ -172,31 +186,51 @@ class _TextScreenState extends State<TextScreen> {
                       onChanged: (String newValue) {
                         setState(() {
                           dropdownValue2 = newValue;
+                          to = newValue;
                         });
                       },
-                      items: enLanguages.values
+                      items: enLanguages.keys
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
-                          child: Text(value),
+                          child: Text(enLanguages[value]),
                         );
                       }).toList(),
                     ),
-                    EditableText(
-                      onChanged: (s) {
-                        if (s != null && s != '') if (from != null &&
-                            from != '' &&
-                            to != null &&
-                            to != '')
-                          translator
-                              .translate(s, from: from, to: to)
-                              .then((s) => cnt1.text = s);
-                      },
-                      backgroundCursorColor: kIconColor,
-                      controller: cnt2,
-                      cursorColor: Colors.lightBlueAccent,
-                      focusNode: FocusNode(),
-                      style: TextStyle(color: kIconColor, fontSize: 20),
+                    Expanded(
+                      child: TextField(
+                        expands: true,
+                        minLines: null,
+                        decoration: InputDecoration(
+                          focusedBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                            ),
+                          ),
+                          enabledBorder: UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Color(0x00000000),
+                            ),
+                          ),
+                        ),
+                        maxLines: null,
+                        onChanged: (s) async {
+                          if (s != null && s != '') if (from != null &&
+                              from != '' &&
+                              to != null &&
+                              to != '') {
+                            var tmp = await translator.translate(s,
+                                from: to, to: from);
+                            setState(() {
+                              cnt1.text = tmp;
+                            });
+                          }
+                        },
+                        controller: cnt2,
+                        cursorColor: Colors.lightBlueAccent,
+                        focusNode: _node2,
+                        style: TextStyle(color: kIconColor, fontSize: 20),
+                      ),
                     ),
                   ],
                 ),

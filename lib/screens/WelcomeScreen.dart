@@ -109,7 +109,7 @@ class WelcomeScreen extends StatelessWidget {
                   BottomButton(
                       icondata: Icons.more_horiz,
                       onPressed: () {
-                        print('sa');
+                        Navigator.pushNamed(context, '/MicScreen2');
                       }),
                 ],
               ),
