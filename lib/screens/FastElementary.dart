@@ -5,19 +5,20 @@ class FastElementary extends StatefulWidget {
   _FastElementaryState createState() => _FastElementaryState();
 }
 
+
 class _FastElementaryState extends State<FastElementary> {
+
+
+  var a=SomeWidget();
+  var b=SomeWidget();
+
+
 
   List<String> _locations = ['A', 'B', 'C', 'D', 'Abdürrezzak Kıllıbacak'];
   String dropdown1;
   String dropdown2;
 
 
-  void method() {
-    var temp;
-    dropdown1=temp;
-    dropdown1=dropdown2;
-    dropdown2=temp;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,16 +97,10 @@ class _FastElementaryState extends State<FastElementary> {
                                 ),
                               ),
                             ),
-                            Container(
-                              height: 50,
-                              color: Colors.amber[600],
-                              child: const Center(child: Text('Entry A')),
-                            ),
-                            Container(
-                              height: 50,
-                              color: Colors.amber[500],
-                              child: const Center(child: Text('Entry B')),
-                            ),
+                           a,
+                            b,
+
+
                             Container(
                               height: 50,
                               color: Colors.amber[100],
@@ -320,7 +315,7 @@ class _FastElementaryState extends State<FastElementary> {
                           OutlineButton(
                               color: Colors.yellowAccent,
                               child: Icon(Icons.compare_arrows),
-                              onPressed: method,
+                              onPressed: null,
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0))
                           )
                         ],
@@ -370,5 +365,46 @@ class _FastElementaryState extends State<FastElementary> {
               ),
           ),
       );
+  }
+}
+
+
+class SomeWidget extends StatefulWidget {
+  @override
+  _SomeWidgetState createState() => _SomeWidgetState();
+}
+
+class _SomeWidgetState extends State<SomeWidget> {
+
+  bool selected=true;
+
+  GestureDetector SomeWidget(Color color){
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selected=!selected;
+        });
+      },
+      child: AnimatedContainer(
+
+        duration: Duration(
+          milliseconds: 500,
+        ),
+        height: selected ? 50 : 150,
+        color: color,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Text("Text Here")
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return SomeWidget(Colors.white);
   }
 }
