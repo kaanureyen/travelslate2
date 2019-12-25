@@ -379,27 +379,76 @@ class _SomeWidgetState extends State<SomeWidget> {
   bool selected=true;
 
   GestureDetector SomeWidget(Color color){
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selected=!selected;
-        });
-      },
-      child: AnimatedContainer(
 
-        duration: Duration(
-          milliseconds: 500,
+    if(selected==true){
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            selected=!selected;
+          });
+
+        },
+        child: AnimatedContainer(
+
+          duration: Duration(
+            milliseconds: 500,
+          ),
+          height: selected ? 50 : 150,
+          color: color,
+          child: Padding(
+              padding: EdgeInsets.only(top: 15),
+              child: Text('TO BE TRANSLATED')
+          ),
         ),
-        height: selected ? 50 : 150,
-        color: color,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text("Text Here")
-          ],
+      );
+    }else{
+      return GestureDetector(
+        onTap: () {
+          setState(() {
+            selected=!selected;
+          });
+
+        },
+        child: AnimatedContainer(
+
+          duration: Duration(
+            milliseconds: 500,
+          ),
+          height: selected ? 50 : 150,
+          color: color,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(padding: EdgeInsets.only(top: 15)),
+              Expanded(
+                flex: 2,
+                  child: Text("TO BE TRANSLATED")
+              ),
+              Expanded(
+                flex: 3,
+                child: Text("TRANSLATED ITEM"),
+              ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: <Widget>[
+                  RaisedButton(
+                    color: Colors.white,
+                      disabledColor: Colors.white,
+                      child: Icon(Icons.volume_up)
+                  ) ,
+                  Icon(Icons.content_copy),
+                  Icon(Icons.favorite_border)
+                ],
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
+
+
+
   }
 
 
